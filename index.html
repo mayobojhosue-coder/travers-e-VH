@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Traversée Photos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#0a1aff,#1e3cff);
+    color:#ffd700;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.container{
+    background:rgba(0,0,0,0.45);
+    padding:40px;
+    border-radius:18px;
+    text-align:center;
+    width:90%;
+    max-width:520px;
+}
+h1{margin-bottom:10px;}
+p{color:#f5e28a;}
+.actions{
+    margin-top:30px;
+}
+.btn{
+    padding:16px 26px;
+    background:linear-gradient(135deg,#ffd700,#ffb700);
+    color:#0a1aff;
+    border:none;
+    border-radius:14px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:16px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.4);
+}
+.btn:hover{
+    transform:scale(1.05);
+}
+input[type=file]{display:none;}
+.status{
+    margin-top:20px;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Traversée Photos</h1>
+    <p>
+        Cliquez sur le bouton ci-dessous<br>
+        pour envoyer vos photos et vidéos.
+    </p>
+
+    <div class="actions">
+        <button class="btn" onclick="pickAndSend()">
+            Mettre les photos
+        </button>
+    </div>
+
+    <input id="files" type="file" multiple accept="image/*,video/*">
+    <div class="status" id="status"></div>
+</div>
+
+<script>
+function pickAndSend(){
+    document.getElementById("files").click();
+}
+
+document.getElementById("files").addEventListener("change", e=>{
+    const files = [...e.target.files];
+
+    if(files.length === 0){
+        return;
+    }
+
+    document.getElementById("status").innerText =
+        "⏳ Envoi de " + files.length + " fichier(s)...";
+
+    const formData = new FormData();
+    files.forEach(file => {
+        formData.append("files", file);
+    });
+
+    fetch("https://script.google.com/macros/s/AKfycbz4ZIBTmQSNFuycc6Vn-NAAeF3424XIqYM5Y4-EuOsl8GfNIqefsZpANygep3x4_2vBjg/exec", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => {
+        if(res.ok){
+            document.getElementById("status").innerText =
+                "✅ Photos et vidéos envoyées avec succès";
+        } else {
+            throw new Error();
+        }
+    })
+    .catch(()=>{
+        document.getElementById("status").innerText =
+            "❌ Erreur lors de l’envoi";
+    });
+});
+</script>
+</body>
+</html>

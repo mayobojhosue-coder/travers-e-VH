@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    text-align: center;
+}
+
+input, button {
+    padding: 10px;
+    margin: 5px;
+}
+
+#gallery img {
+    width: 200px;
+    margin: 10px;
+    border-radius: 10px;
+}
